@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Advanced Tech Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0f1f; /* Even darker, more techy background */
+            --bg-medium: #10172b;
+            --bg-light: #1a233f;
+            --text-primary: #E0E7FF; /* Lighter, slightly blueish text */
+            --text-secondary: #A0AEC0;
+            --accent-purple: #8B5CF6;
+            --accent-pink: #EC4899;
+            --accent-cyan: #22D3EE;
+            --accent-blue: #3B82F6;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            overflow-x: hidden; /* Prevent horizontal scroll from animations */
+        }
+
+        /* Futuristic Title Font */
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .nav-link {
+            @apply px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700/50 hover:text-var(--accent-cyan) transition-all duration-300;
+        }
+
+        .section-title {
+            @apply font-orbitron text-3xl sm:text-4xl lg:text-5xl font-bold mb-10 sm:mb-16 text-center text-transparent bg-clip-text bg-gradient-to-r from-var(--accent-cyan) via-var(--accent-purple) to-var(--accent-pink);
+            animation: shimmer 3s infinite alternate;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        .bg-gradient-to-r.from-var { /* Ensure shimmer works by extending gradient size */
+            background-size: 200% auto;
+        }
+
+
+        .project-card {
+            @apply bg-var(--bg-medium) rounded-xl shadow-2xl overflow-hidden transform transition-all duration-300 hover:scale-105 relative border border-transparent hover:border-var(--accent-cyan);
+        }
+        .project-card::before { /* Glow effect */
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: conic-gradient(from 90deg at 50% 50%, var(--accent-cyan), var(--accent-purple), var(--accent-pink), var(--accent-cyan));
+            z-index: -1;
+            filter: blur(10px);
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            border-radius: 0.875rem; /* Match rounded-xl */
+        }
+        .project-card:hover::before {
+            opacity: 0.7;
+        }
+
+        .project-card img {
+            @apply w-full h-52 object-cover transition-transform duration-300 group-hover:scale-110; /* Group hover for image */
+        }
+        .future-project-badge {
+            @apply absolute top-4 right-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-lg;
+        }
+        .future-project-card {
+            @apply border-2 border-dashed border-gray-600 hover:border-var(--accent-blue);
+        }
+        .future-project-card::before {
+            background: conic-gradient(from 90deg at 50% 50%, var(--accent-blue), var(--accent-purple), var(--accent-blue));
+        }
+
+
+        .skill-badge {
+            @apply inline-block bg-var(--bg-light) text-var(--accent-cyan) text-xs font-semibold mr-2 mb-2 px-3 py-1.5 rounded-md border border-var(--accent-blue)/30 transition-all duration-300 hover:bg-var(--accent-blue) hover:text-white hover:shadow-lg hover:shadow-var(--accent-blue)/50 transform hover:scale-110;
+        }
+
+        .btn {
+            @apply inline-block px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:-translate-y-1 shadow-md;
+        }
+        .btn-primary {
+            @apply bg-gradient-to-r from-var(--accent-purple) to-var(--accent-pink) hover:from-var(--accent-pink) hover:to-var(--accent-purple) text-white relative overflow-hidden;
+        }
+        .btn-primary::after { /* Shimmer effect for button */
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.15);
+            transform: rotate(30deg);
+            transition: transform 0.5s ease-out;
+            pointer-events: none;
+        }
+        .btn-primary:hover::after {
+            transform: translateX(100%) rotate(30deg);
+        }
+
+        .btn-secondary {
+            @apply bg-var(--bg-light) hover:bg-var(--accent-cyan) hover:text-var(--bg-dark) text-var(--text-primary) border border-var(--accent-cyan)/50;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(var(--accent-purple), var(--accent-cyan));
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(var(--accent-cyan), var(--accent-purple));
+        }
+
+        /* Typing animation */
+        .typewriter-text {
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: .10em solid var(--accent-cyan); /* Cursor */
+            animation: typing 3s steps(30, end) forwards, blink-caret .75s step-end infinite;
+        }
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--accent-cyan); }
+        }
+        
+        /* Subtle background grid for sections */
+        .section-bg-grid {
+            background-image: linear-gradient(to right, var(--bg-light) 1px, transparent 1px),
+                              linear-gradient(to bottom, var(--bg-light) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Entrance Animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Project Icon Styling */
+        .project-icon {
+            @apply w-10 h-10 mb-3 text-var(--accent-cyan) group-hover:text-var(--accent-pink) transition-colors duration-300;
+        }
+
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav class="bg-var(--bg-medium)/80 backdrop-blur-lg fixed w-full z-50 top-0 shadow-2xl border-b border-var(--bg-light)/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center">
+                    <a href="#" class="font-orbitron text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-var(--accent-cyan) to-var(--accent-purple)">YourName.ai</a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-2">
+                        <a href="#home" class="nav-link">Home</a>
+                        <a href="#about" class="nav-link">About</a>
+                        <a href="#expertise" class="nav-link">Expertise</a>
+                        <a href="#projects" class="nav-link">Projects</a>
+                        <a href="#contact" class="nav-link">Contact</a>
+                    </div>
+                </div>
+                <div class="-mr-2 flex md:hidden">
+                    <button type="button" id="mobile-menu-button" class="bg-var(--bg-light) inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-var(--accent-cyan) focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-var(--bg-medium) focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                        <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#home" class="nav-link block text-base">Home</a>
+                <a href="#about" class="nav-link block text-base">About</a>
+                <a href="#expertise" class="nav-link block text-base">Expertise</a>
+                <a href="#projects" class="nav-link block text-base">Projects</a>
+                <a href="#contact" class="nav-link block text-base">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="min-h-screen flex items-center justify-center pt-20 relative overflow-hidden">
+        <div class="absolute inset-0 z-0 opacity-40" style="background: linear-gradient(45deg, var(--accent-purple), var(--accent-cyan), var(--accent-pink), var(--bg-dark)); background-size: 400% 400%; animation: gradientBG 15s ease infinite;"></div>
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        <div class="relative z-10 text-center p-6 bg-var(--bg-medium)/70 backdrop-blur-md rounded-xl shadow-2xl max-w-4xl mx-auto">
+            <h1 class="font-orbitron text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
+                <span class="block text-transparent bg-clip-text bg-gradient-to-r from-var(--accent-cyan) via-var(--accent-blue) to-var(--accent-purple) mb-2">YOUR NAME</span>
+                <span class="block text-2xl sm:text-3xl text-var(--text-primary)">Architect of Intelligent Systems</span>
+            </h1>
+            <div class="text-xl sm:text-2xl text-gray-300 mb-10 h-16 sm:h-10 flex items-center justify-center">
+                 <p id="role-typewriter" class="typewriter-text-container"></p> </div>
+            <a href="#projects" class="btn btn-primary mr-2 mb-2 sm:mb-0 text-lg">Explore Innovations</a>
+            <a href="#contact" class="btn btn-secondary text-lg">Connect With Me</a>
+        </div>
+    </section>
+
+    <section id="about" class="py-20 sm:py-28 section-bg-grid">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="section-title animate-on-scroll">About Me</h2>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-10 items-center">
+                <div class="md:col-span-2 rounded-lg overflow-hidden shadow-2xl border-2 border-var(--accent-blue)/50 animate-on-scroll" style="animation-delay: 0.2s;">
+                    <img src="https://placehold.co/600x700/1a233f/E0E7FF?text=Futuristic+Avatar" alt="Your Name - AI & CyberSec Expert" class="w-full h-auto object-cover">
+                </div>
+                <div class="md:col-span-3 animate-on-scroll" style="animation-delay: 0.4s;">
+                    <p class="text-lg text-var(--text-secondary) mb-6 leading-relaxed">
+                        Greetings! I'm [Your Name], a multi-faceted technologist specializing in the convergence of Artificial Intelligence, Cybersecurity, and Data Science. My mission is to engineer secure, intelligent solutions that drive innovation and tackle complex real-world challenges.
+                    </p>
+                    <p class="text-lg text-var(--text-secondary) mb-6 leading-relaxed">
+                        With a foundation in [mention key experience/education, e.g., advanced algorithms, neural networks, threat intelligence, and statistical modeling], I thrive on transforming raw data into actionable insights, fortifying digital landscapes against sophisticated threats, and pioneering the next generation of AI-driven applications. My approach is rooted in a deep understanding of theoretical principles combined with hands-on expertise in cutting-edge tools and frameworks.
+                    </p>
+                     <a href="#expertise" class="btn btn-primary mt-4">Discover My Expertise</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="expertise" class="py-20 sm:py-28 bg-var(--bg-medium)">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="section-title animate-on-scroll">Core Expertise</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-var(--bg-light) p-8 rounded-xl shadow-2xl border border-var(--accent-purple)/30 animate-on-scroll" style="animation-delay: 0.1s;">
+                    <div class="flex items-center mb-4">
+                        <svg class="w-12 h-12 text-var(--accent-purple) mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        <h3 class="font-orbitron text-2xl font-semibold text-white">AI & Machine Learning</h3>
+                    </div>
+                    <p class="text-var(--text-secondary) mb-4 text-sm leading-relaxed">Developing intelligent algorithms, predictive models, NLP solutions, and computer vision systems. Proficient in deep learning frameworks and MLOps.</p>
+                    <div>
+                        <span class="skill-badge">Python</span><span class="skill-badge">TensorFlow</span><span class="skill-badge">PyTorch</span><span class="skill-badge">Scikit-learn</span><span class="skill-badge">NLP</span><span class="skill-badge">Computer Vision</span>
+                    </div>
+                </div>
+                <div class="bg-var(--bg-light) p-8 rounded-xl shadow-2xl border border-var(--accent-cyan)/30 animate-on-scroll" style="animation-delay: 0.3s;">
+                     <div class="flex items-center mb-4">
+                        <svg class="w-12 h-12 text-var(--accent-cyan) mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                        <h3 class="font-orbitron text-2xl font-semibold text-white">Ethical Hacking & CyberSec</h3>
+                    </div>
+                    <p class="text-var(--text-secondary) mb-4 text-sm leading-relaxed">Conducting penetration testing, vulnerability assessments, threat modeling, and implementing robust security architectures. Expertise in network security and incident response.</p>
+                    <div>
+                        <span class="skill-badge">Penetration Testing</span><span class="skill-badge">Metasploit</span><span class="skill-badge">Nmap</span><span class="skill-badge">Wireshark</span><span class="skill-badge">SIEM</span><span class="skill-badge">Cryptography</span>
+                    </div>
+                </div>
+                <div class="bg-var(--bg-light) p-8 rounded-xl shadow-2xl border border-var(--accent-pink)/30 animate-on-scroll" style="animation-delay: 0.5s;">
+                    <div class="flex items-center mb-4">
+                        <svg class="w-12 h-12 text-var(--accent-pink) mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <h3 class="font-orbitron text-2xl font-semibold text-white">Data Science & Analytics</h3>
+                    </div>
+                    <p class="text-var(--text-secondary) mb-4 text-sm leading-relaxed">Extracting insights from complex datasets through statistical analysis, data visualization, and big data technologies. Building data pipelines and deploying models.</p>
+                     <div>
+                        <span class="skill-badge">Pandas</span><span class="skill-badge">NumPy</span><span class="skill-badge">SQL</span><span class="skill-badge">R</span><span class="skill-badge">Tableau</span><span class="skill-badge">Spark</span><span class="skill-badge">Data Mining</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="py-20 sm:py-28 section-bg-grid">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="section-title animate-on-scroll">Innovations & Case Studies</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                
+                <div class="project-card group animate-on-scroll" style="animation-delay: 0.1s;">
+                    <img src="https://placehold.co/600x400/10172b/22D3EE?text=AI+Threat+Detection" alt="AI Threat Detection System">
+                    <div class="p-6">
+                        <div class="flex justify-center">
+                           <svg class="project-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                        </div>
+                        <h3 class="font-orbitron text-xl font-semibold mb-2 text-center text-white">AI-Powered Threat Detection</h3>
+                        <p class="text-var(--text-secondary) text-sm mb-4 text-center">
+                            Developed a real-time anomaly detection system using deep learning to identify and neutralize cyber threats with predictive accuracy.
+                        </p>
+                        <div class="mb-4 text-center">
+                            <span class="skill-badge">AI/ML</span><span class="skill-badge">Cybersecurity</span><span class="skill-badge">Python</span>
+                        </div>
+                        <div class="text-center">
+                            <a href="#" class="text-var(--accent-cyan) hover:text-var(--accent-pink) font-medium transition-colors">View Case Study &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card group animate-on-scroll" style="animation-delay: 0.3s;">
+                    <img src="https://placehold.co/600x400/10172b/8B5CF6?text=Secure+Data+Analytics" alt="Secure Data Analytics Platform">
+                     <div class="p-6">
+                        <div class="flex justify-center">
+                            <svg class="project-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                        </div>
+                        <h3 class="font-orbitron text-xl font-semibold mb-2 text-center text-white">Secure Data Analytics Platform</h3>
+                        <p class="text-var(--text-secondary) text-sm mb-4 text-center">
+                            Engineered a platform for sensitive data analysis incorporating advanced encryption, access controls, and privacy-preserving ML techniques.
+                        </p>
+                         <div class="mb-4 text-center">
+                            <span class="skill-badge">Data Science</span><span class="skill-badge">Cryptography</span><span class="skill-badge">Cloud Security</span>
+                        </div>
+                        <div class="text-center">
+                            <a href="#" class="text-var(--accent-cyan) hover:text-var(--accent-pink) font-medium transition-colors">View Case Study &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-card future-project-card relative group animate-on-scroll" style="animation-delay: 0.5s;">
+                    <span class="future-project-badge">R&D Initiative</span>
+                    <img src="https://placehold.co/600x400/1a233f/A0AEC0?text=Quantum+Encryption+R&D" alt="Quantum-Resistant Encryption R&D">
+                    <div class="p-6">
+                        <div class="flex justify-center">
+                           <svg class="project-icon !text-gray-500 group-hover:!text-var(--accent-blue)" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
+                        </div>
+                        <h3 class="font-orbitron text-xl font-semibold mb-2 text-center text-gray-300">Quantum-Resistant Encryption</h3>
+                        <p class="text-gray-500 text-sm mb-4 text-center">
+                            Exploring post-quantum cryptographic algorithms to develop next-generation security protocols for future-proofing data integrity.
+                        </p>
+                        <div class="mb-4 text-center">
+                            <span class="skill-badge !bg-gray-700 !text-gray-400">Cryptography</span><span class="skill-badge !bg-gray-700 !text-gray-400">Quantum Computing</span>
+                        </div>
+                        <div class="text-center">
+                            <span class="text-gray-500 font-medium">Exploratory Phase</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-20 sm:py-28 bg-var(--bg-medium)">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="section-title animate-on-scroll">Initiate Contact</h2>
+            <p class="text-lg text-var(--text-secondary) mb-10 animate-on-scroll" style="animation-delay: 0.2s;">
+                Ready to discuss groundbreaking projects, collaborations, or explore how my expertise can elevate your objectives? Let's connect and shape the future of technology.
+            </p>
+            <a href="mailto:your.email@example.com" class="btn btn-primary text-xl animate-on-scroll" style="animation-delay: 0.4s;">
+                Send Transmission
+            </a>
+            <div class="mt-12 flex justify-center space-x-8 animate-on-scroll" style="animation-delay: 0.6s;">
+                <a href="#" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-var(--accent-cyan) transition-colors" title="GitHub">
+                    <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.074 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.026 2.747-1.026.546 1.379.201 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" /></svg>
+                </a>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-var(--accent-cyan) transition-colors" title="LinkedIn">
+                    <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                </a>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-var(--accent-cyan) transition-colors" title="X (Twitter)">
+                     <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-var(--bg-dark) border-t border-var(--bg-light)/30">
+        <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8 text-center text-var(--text-secondary) text-sm">
+            <p>&copy; <span id="currentYear"></span> Your Name | AI & CyberSec Innovator. All Rights Reserved.</p>
+            <p class="mt-2">Forging the Future with Code & Data | <a href="#" class="hover:text-var(--accent-cyan)">Privacy Policy</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const menuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = mobileMenu.querySelectorAll('a'); // Also select links in mobile menu
+
+        menuButton.addEventListener('click', () => {
+            const expanded = menuButton.getAttribute('aria-expanded') === 'true' || false;
+            menuButton.setAttribute('aria-expanded', !expanded);
+            mobileMenu.classList.toggle('hidden');
+            menuButton.querySelectorAll('svg').forEach(icon => icon.classList.toggle('hidden'));
+        });
+        
+        // Close mobile menu when a nav link is clicked
+        document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                    menuButton.click(); // Simulate click to close if open
+                }
+            });
+        });
+
+
+        // Set current year in footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Typewriter effect for roles
+        const roles = [
+            "AI & Machine Learning Engineer",
+            "Ethical Hacker & Cybersecurity Expert",
+            "Data Science Professional",
+            "Innovator in Tech"
+        ];
+        let currentRoleIndex = 0;
+        let charIndex = 0;
+        const typewriterElement = document.getElementById('role-typewriter');
+        const typingSpeed = 100; // milliseconds
+        const erasingSpeed = 50; // milliseconds
+        const delayBetweenRoles = 2000; // milliseconds
+
+        function typeRole() {
+            if (charIndex < roles[currentRoleIndex].length) {
+                typewriterElement.innerHTML += roles[currentRoleIndex].charAt(charIndex);
+                charIndex++;
+                setTimeout(typeRole, typingSpeed);
+            } else {
+                setTimeout(eraseRole, delayBetweenRoles);
+            }
+        }
+
+        function eraseRole() {
+            if (charIndex > 0) {
+                typewriterElement.innerHTML = roles[currentRoleIndex].substring(0, charIndex - 1);
+                charIndex--;
+                setTimeout(eraseRole, erasingSpeed);
+            } else {
+                currentRoleIndex = (currentRoleIndex + 1) % roles.length;
+                setTimeout(typeRole, typingSpeed);
+            }
+        }
+        
+        // Start typewriter on load if element exists
+        if (typewriterElement) {
+            // Wrap the text in a span with the typewriter class for the blinking cursor
+            typewriterElement.innerHTML = '<span class="typewriter-text"></span>';
+            // Target the inner span for typing
+            const innerSpan = typewriterElement.querySelector('.typewriter-text');
+            
+            // Modified type/erase functions to target innerSpan
+            function typeRoleInner() {
+                if (charIndex < roles[currentRoleIndex].length) {
+                    innerSpan.innerHTML += roles[currentRoleIndex].charAt(charIndex);
+                    charIndex++;
+                    setTimeout(typeRoleInner, typingSpeed);
+                } else {
+                    setTimeout(eraseRoleInner, delayBetweenRoles);
+                }
+            }
+
+            function eraseRoleInner() {
+                if (charIndex > 0) {
+                    innerSpan.innerHTML = roles[currentRoleIndex].substring(0, charIndex - 1);
+                    charIndex--;
+                    setTimeout(eraseRoleInner, erasingSpeed);
+                } else {
+                    currentRoleIndex = (currentRoleIndex + 1) % roles.length;
+                    setTimeout(typeRoleInner, typingSpeed);
+                }
+            }
+            setTimeout(typeRoleInner, 500); // Initial delay before starting
+        }
+
+
+        // Scroll Animations
+        const scrollElements = document.querySelectorAll('.animate-on-scroll');
+        const elementInView = (el, dividend = 1) => {
+            const elementTop = el.getBoundingClientRect().top;
+            return (
+                elementTop <= (window.innerHeight || document.documentElement.clientHeight) / dividend
+            );
+        };
+        const displayScrollElement = (element) => {
+            element.classList.add('is-visible');
+        };
+        const hideScrollElement = (element) => { // Optional: hide if scrolled back up
+            element.classList.remove('is-visible');
+        };
+        const handleScrollAnimation = () => {
+            scrollElements.forEach((el) => {
+                if (elementInView(el, 1.25)) { // Adjust 1.25 for when animation triggers
+                    displayScrollElement(el);
+                } 
+                // else { // Optional: hide if scrolled back up
+                //     hideScrollElement(el);
+                // }
+            });
+        };
+        window.addEventListener('scroll', () => {
+            handleScrollAnimation();
+        });
+        // Trigger on load for elements already in view
+        handleScrollAnimation();
+
+    </script>
+
+</body>
+</html>
