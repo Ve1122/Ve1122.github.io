@@ -38,16 +38,13 @@
         .section-title {
             @apply font-orbitron text-3xl sm:text-4xl lg:text-5xl font-bold mb-10 sm:mb-16 text-center text-transparent bg-clip-text bg-gradient-to-r from-var(--accent-cyan) via-var(--accent-purple) to-var(--accent-pink);
             animation: shimmer 3s infinite alternate;
+            background-size: 200% auto; /* Ensure shimmer works by extending gradient size */
         }
         
         @keyframes shimmer {
             0% { background-position: -200% center; }
             100% { background-position: 200% center; }
         }
-        .bg-gradient-to-r.from-var { /* Ensure shimmer works by extending gradient size */
-            background-size: 200% auto;
-        }
-
 
         .project-card {
             @apply bg-var(--bg-medium) rounded-xl shadow-2xl overflow-hidden transform transition-all duration-300 hover:scale-105 relative border border-transparent hover:border-var(--accent-cyan);
@@ -165,6 +162,13 @@
             @apply w-10 h-10 mb-3 text-var(--accent-cyan) group-hover:text-var(--accent-pink) transition-colors duration-300;
         }
 
+        /* Keyframe for hero section background gradient animation */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
     </style>
 </head>
 <body class="antialiased">
@@ -206,12 +210,7 @@
 
     <section id="home" class="min-h-screen flex items-center justify-center pt-20 relative overflow-hidden">
         <div class="absolute inset-0 z-0 opacity-40" style="background: linear-gradient(45deg, var(--accent-purple), var(--accent-cyan), var(--accent-pink), var(--bg-dark)); background-size: 400% 400%; animation: gradientBG 15s ease infinite;"></div>
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
+        
         <div class="relative z-10 text-center p-6 bg-var(--bg-medium)/70 backdrop-blur-md rounded-xl shadow-2xl max-w-4xl mx-auto">
             <h1 class="font-orbitron text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
                 <span class="block text-transparent bg-clip-text bg-gradient-to-r from-var(--accent-cyan) via-var(--accent-blue) to-var(--accent-purple) mb-2">YOUR NAME</span>
@@ -382,8 +381,7 @@
         // Mobile menu toggle
         const menuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
-        const navLinks = mobileMenu.querySelectorAll('a'); // Also select links in mobile menu
-
+        
         menuButton.addEventListener('click', () => {
             const expanded = menuButton.getAttribute('aria-expanded') === 'true' || false;
             menuButton.setAttribute('aria-expanded', !expanded);
@@ -407,20 +405,22 @@
         // Typewriter effect for roles
         const roles = [
             "AI & Machine Learning Engineer",
+            "Data Scientist", // Changed from "Data Science Professional" and moved up
             "Ethical Hacker & Cybersecurity Expert",
-            "Data Science Professional",
             "Innovator in Tech"
         ];
         let currentRoleIndex = 0;
         let charIndex = 0;
-        const typewriterElement = document.getElementById('role-typewriter');
+        const typewriterContainer = document.getElementById('role-typewriter');
         const typingSpeed = 100; // milliseconds
         const erasingSpeed = 50; // milliseconds
         const delayBetweenRoles = 2000; // milliseconds
 
+        let innerSpanForTyping; 
+
         function typeRole() {
             if (charIndex < roles[currentRoleIndex].length) {
-                typewriterElement.innerHTML += roles[currentRoleIndex].charAt(charIndex);
+                innerSpanForTyping.innerHTML += roles[currentRoleIndex].charAt(charIndex);
                 charIndex++;
                 setTimeout(typeRole, typingSpeed);
             } else {
@@ -430,44 +430,19 @@
 
         function eraseRole() {
             if (charIndex > 0) {
-                typewriterElement.innerHTML = roles[currentRoleIndex].substring(0, charIndex - 1);
+                innerSpanForTyping.innerHTML = roles[currentRoleIndex].substring(0, charIndex - 1);
                 charIndex--;
                 setTimeout(eraseRole, erasingSpeed);
             } else {
                 currentRoleIndex = (currentRoleIndex + 1) % roles.length;
-                setTimeout(typeRole, typingSpeed);
+                setTimeout(typeRole, typingSpeed); 
             }
         }
         
-        // Start typewriter on load if element exists
-        if (typewriterElement) {
-            // Wrap the text in a span with the typewriter class for the blinking cursor
-            typewriterElement.innerHTML = '<span class="typewriter-text"></span>';
-            // Target the inner span for typing
-            const innerSpan = typewriterElement.querySelector('.typewriter-text');
-            
-            // Modified type/erase functions to target innerSpan
-            function typeRoleInner() {
-                if (charIndex < roles[currentRoleIndex].length) {
-                    innerSpan.innerHTML += roles[currentRoleIndex].charAt(charIndex);
-                    charIndex++;
-                    setTimeout(typeRoleInner, typingSpeed);
-                } else {
-                    setTimeout(eraseRoleInner, delayBetweenRoles);
-                }
-            }
-
-            function eraseRoleInner() {
-                if (charIndex > 0) {
-                    innerSpan.innerHTML = roles[currentRoleIndex].substring(0, charIndex - 1);
-                    charIndex--;
-                    setTimeout(eraseRoleInner, erasingSpeed);
-                } else {
-                    currentRoleIndex = (currentRoleIndex + 1) % roles.length;
-                    setTimeout(typeRoleInner, typingSpeed);
-                }
-            }
-            setTimeout(typeRoleInner, 500); // Initial delay before starting
+        if (typewriterContainer) {
+            typewriterContainer.innerHTML = '<span class="typewriter-text"></span>'; 
+            innerSpanForTyping = typewriterContainer.querySelector('.typewriter-text'); 
+            setTimeout(typeRole, 500); 
         }
 
 
@@ -482,24 +457,19 @@
         const displayScrollElement = (element) => {
             element.classList.add('is-visible');
         };
-        const hideScrollElement = (element) => { // Optional: hide if scrolled back up
-            element.classList.remove('is-visible');
-        };
         const handleScrollAnimation = () => {
             scrollElements.forEach((el) => {
-                if (elementInView(el, 1.25)) { // Adjust 1.25 for when animation triggers
+                if (elementInView(el, 1.25)) { 
                     displayScrollElement(el);
                 } 
-                // else { // Optional: hide if scrolled back up
-                //     hideScrollElement(el);
-                // }
             });
         };
         window.addEventListener('scroll', () => {
             handleScrollAnimation();
         });
-        // Trigger on load for elements already in view
-        handleScrollAnimation();
+        document.addEventListener('DOMContentLoaded', () => {
+            handleScrollAnimation();
+        });
 
     </script>
 
